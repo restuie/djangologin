@@ -1,0 +1,26 @@
+/* static/css/main.css */
+
+.wrapper h1, h3 {
+    color: #0a2c1a;
+}
+label {
+    font-size: 20px;
+    color: #0a2c1a;
+}
+input, select{
+    margin-bottom: 10px;
+    width: 50%;
+    padding: 15px;
+    border: 1px solid #125a33;
+    font-size: 14px;
+    background-color: #71d19e;
+    color: white;
+}
+.button{
+    color: white;
+    white-space: nowrap;
+    background-color: #31d47d;
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 2px;
+}
