@@ -6,6 +6,10 @@ app_name = "basiclogin"
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('register', views.register, name='register'),
-    path('login', views.login, name='login'),
+    #path('register', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+    path('userinfo/',views.userinfo, name='userinfo'),
+    path('register/',views.register, name='register'),
+    path('rfidinfo/',views.rfidinfo,name='rfidinfo'),
 ]

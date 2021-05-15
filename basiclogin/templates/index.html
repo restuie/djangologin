@@ -1,10 +1,47 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}麥香{% endblock %}
 {% block content %}
-<!DOCTYPE html>
-
-<h1>this is index page</h1>
-<p>{{ username }}</p>
-
+<div class='container'>
+{% for message in messages %}
+    <div class='alert alert-{{message.tags}}'>{{ message }}</div>
+{% endfor %}
+<div class='row'>
+    <div class='col-md-12'>
+        <div class='panel panel-default'>
+            <div class='panel-heading' align=center>
+                <h3>{{ username | default:"我"}}的麥香</h3>
+            </div>
+        </div>
+    </div>
+</div>
+    {% for diary in diaries %}
+    {% cycle "<div class='row'>" "" "" %}
+        <div class='col-md-4'>
+            <div class='panel panel-primary'>
+                <div class='panel-heading' align=center>
+                    {{ diary.ddate }}
+                </div>
+                <div class='panel-body'>
+                    {{ diary.rfid | linebreaks }}
+                </div>
+                <div class='panel-footer'>
+                    早安您好!!
+                    <span class="glyphicon glyphicon-trash" onclick='go_delete({{p.id}})'></span>
+                </div>
+            </div>
+        </div>    
+    {% cycle "" "" "</div>" %}
+    {% empty %}
+        <h3><em>登入網站後才能夠喝麥香</em></h3>
+    {% endfor %}
+</div>
+<script>
+function go_delete(id){
+    var user_pass = document.getElementById('user_pass').value;
+    if (user_pass != "") {
+        var usr = '/' + id + '/' + user_pass;
+        window.location = usr;
+    }
+}
+</script>
 {% endblock %}
-
-

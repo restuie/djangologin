@@ -3,14 +3,20 @@
         <div class='container-fluid'>
             <div class='navbar-header'>
                 <div class='navbar-brand' align=center>
-                    <a href=''>麥香砸摳</a>
+                    麥香 
                 </div>
             </div>
             <ul class='nav navbar-nav'>
-                <li class='active'><a href=''>Home</a></li>
-                <li><a href='/admin'>後台管理</a></li>  
-                <li><a href='/register'>註冊</a></li>  
-                <li><a href='/login'>登入</a></li>
+                <li class='active'><a href='/'>Home</a></li>
+                    {% if username %}
+                    <li><a href='/logout'>登出</a></li>
+                    <li><a href='/userinfo'>wifi資訊</a></li>
+                    <li><a href='/rfidinfo'>rfid</a></li>
+                    {% else %}
+                    <li><a href='/login'>登入</a></li>
+                    <li><a href='/register'>註冊</a></li>
+                    {% endif %}
+                    <li><a href='/admin'>後台管理</a></li>  
             </ul>
         </div>
     </nav>
