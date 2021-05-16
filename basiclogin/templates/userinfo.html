@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}分享日記{% endblock %}
+{% block title %}麥香{% endblock %}
 {% block content %}
 <div class='container'>
 <div class='row'>
@@ -18,8 +18,11 @@
                 {{ userinfo.user.username | upper }}
             </div>
             <div class='panel panel-body'>
-                wifi名稱：{{ userinfo.wifiname }}<br/>
-                wifi密碼：{{ userinfo.wifipassword }}<br/>
+                <label for='wifiname'>wifi名稱:</label>
+                <input id='wifiname' type='text' name='wifiname' value={{ userinfo.wifiname }}>
+                <label for='wifiname'>wifi名稱:</label>
+                <input id='wifipassword' type='password' name='wifipassword' value={{ userinfo.wifipassword }}>
+
                 
             </div>
         </div>
