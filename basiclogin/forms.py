@@ -8,3 +8,6 @@ class RegisterForm(forms.Form):
     username = forms.CharField(max_length=10)
     password = forms.CharField(max_length=10)
     check_password = forms.CharField(max_length=10)
+
+class RFIDForm(forms.Form):
+    rfidname = forms.CharField(max_length=10)

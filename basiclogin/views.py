@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.contrib.auth.models import User
-
+from json import dump, dumps
 
 def login(request):
     if request.method == 'POST':
@@ -76,6 +76,14 @@ def index(request, pid=None, del_pass=None):
 def rfidinfo(request):
     if request.user.is_authenticated:
         username = request.user.username
+        try: 
+            user = User.objects.get(username=username)
+            wifiinfo = models.wifi.objects.get(user=user)
+            wifiname = wifiinfo.wifiname
+            wifipassword = wifiinfo.wifipassword   
+
+        except:
+            fail = 'fail'
     return render(request, 'rfid.html', locals())
 
 @login_required(login_url='/login/')
