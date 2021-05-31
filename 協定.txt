@@ -1,0 +1,17 @@
+{"title":"rfidmode","username":["webview","arduino"],"body":{"uid":"101411216934067744324","soundId":"7d63ae1d-86fa-4c9f-ab4e-51612ea07276","hash":"UD","door":"door1"}}
+
+
+網站命令啟動rfid
+{"title":"rfidmode","rfidstatus":"1","wifiname":"restuie","wifipassword":"restuie555"}
+網站命令關閉rfid
+{"title":"rfidmode","rfidstatus":"0","wifiname":"restuie","wifipassword":"restuie555"}
+
+
+{"title":"rfidresponse","wifiname":"restuie","wifipassword":"restuie555","rfidtag":"e2b43c14"}
+
+
+咻咻咻碰碰碰 
+基於車用物聯網晶片附帶低電壓保護整合系統之應用與實現
+機車電瓶低於12v就有發動上困難
+12.2v的時候把電切斷
+機車電瓶高於13.7v會讓電路進行復歸
