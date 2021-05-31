@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}修改rfid{% endblock %}
 {% block content %}
-
+{% for message in messages %}
+<div class='alert alert-{{message.tags}}'>{{ message }}</div>
+{% endfor %}
 <div class='container'>
     <div class='row'>
         <div class='col-md-12'>
@@ -22,18 +24,17 @@
                 </div>
                 <div class='panel panel-body'>
                     <form action='.' method='POST'>
+                        {% csrf_token %}
                         <label for='rfidname'>RFID:</label>
                         <input id='rfidname' type='text' name='rfidname'>
-                        <input type='submit' value='修改'><br />
+                        <input type='submit' value='修改' activate='false'><br />
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div id='wifiinfo' wifiname="{{ wifiname }}" wifipassword="{{ wifipassword }}"></div>
-
 <script type="text/javascript">
     var socket;
     var rfidopen = '{"title":"rfidmode","rfidstatus":"1","wifiname":"restuie","wifipassword":"restuie555"}'
@@ -54,17 +55,20 @@
             var ta = document.getElementById('rfidname');
             //ta.value = wifiname
             console.log(mestr['wifiname'])
-            if (wifiname == meStr['wifiname'] && wifipassword == meStr['wifipassword']) {
-                ta.value = meStr['rfidtag']
+            if (mestr["title"] = "rfidresponse") {
+                if (wifiname == meStr['wifiname'] && wifipassword == meStr['wifipassword']) {
+                    ta.value = meStr['rfidtag']
+                }
             }
+
 
             //
             //ta.value = ta.value + '\n' + event.data
         };
         socket.onopen = function (event) {
             send(rfidopen)
-            //var ta = document.getElementById('rfidname');
-            //ta.value = "連接開啟!";
+            var ta = document.getElementById('rfidname');
+            ta.value = "";
         };
         socket.onclose = function (event) {
             send(rfidclose)
@@ -82,7 +86,7 @@
         if (socket.readyState == WebSocket.OPEN) {
             socket.send(message);
         } else {
-            alert("連接沒有開啟.");
+            //alert("連接沒有開啟.");
         }
     }
 </script>

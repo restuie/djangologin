@@ -12,4 +12,5 @@ urlpatterns = [
     path('userinfo/',views.userinfo, name='userinfo'),
     path('register/',views.register, name='register'),
     path('rfidinfo/',views.rfidinfo,name='rfidinfo'),
+    #path('delete/<str:rfidname>',views.deleterfid,name='delete'),
 ]

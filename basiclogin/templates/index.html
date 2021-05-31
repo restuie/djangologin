@@ -26,7 +26,7 @@
                 </div>
                 <div class='panel-footer'>
                     早安您好!!
-                    <span class="glyphicon glyphicon-trash" onclick='go_delete({{p.id}})'></span>
+                    <span class="glyphicon glyphicon-trash " onclick='go_delete({{p.id}})'></span>
                 </div>
             </div>
         </div>    
@@ -37,11 +37,17 @@
 </div>
 <script>
 function go_delete(id){
-    var user_pass = document.getElementById('user_pass').value;
-    if (user_pass != "") {
-        var usr = '/' + id + '/' + user_pass;
-        window.location = usr;
+    $(document).ready(function () {
+        $(".glyphicon").click(function(){
+            alert("123");
+        })
+
     }
+    //var user_pass = document.getElementById('user_pass').value;
+    //if (user_pass != "") {
+    //    var usr = '/' + id + '/' + user_pass;
+    //    window.location = usr;
+    //}
 }
 </script>
 {% endblock %}

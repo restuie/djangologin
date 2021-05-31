@@ -1,25 +1,30 @@
 #from django.core.checks import messages
+from io import RawIOBase
+from django.db.models.base import Model
+from django.forms.widgets import MultipleHiddenInput
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
-# Create your views here.
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from basiclogin.verification import verification
 from django.contrib.sessions.models import Session
-from . import models, forms
+from basiclogin import models, forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.contrib.auth.models import User
 from json import dump, dumps
+import datetime
+# Create your views here.
+
 
 def login(request):
     if request.method == 'POST':
         login_form = forms.LoginForm(request.POST)
         if login_form.is_valid():
-            login_name=request.POST['username'].strip()
-            login_password=request.POST['password']
+            login_name = request.POST['username'].strip()
+            login_password = request.POST['password']
             user = authenticate(username=login_name, password=login_password)
             if user is not None:
                 if user.is_active:
@@ -32,7 +37,7 @@ def login(request):
             else:
                 messages.add_message(request, messages.WARNING, '登入失敗')
         else:
-            messages.add_message(request, messages.INFO,'請檢查輸入的欄位內容')
+            messages.add_message(request, messages.INFO, '請檢查輸入的欄位內容')
     else:
         login_form = forms.LoginForm()
     return render(request, 'login.html', locals())
@@ -42,50 +47,89 @@ def register(request):
     if request.method == "POST":
         register_form = forms.RegisterForm(request.POST)
         if register_form.is_valid():
-            register_name=request.POST['username'].strip()
-            register_password=request.POST['password']
-            register_check_password=request.POST['check_password']
+            register_name = request.POST['username'].strip()
+            register_password = request.POST['password']
+            register_check_password = request.POST['check_password']
             if register_password == register_check_password:
                 user = authenticate(username=register_name)
                 if user is None:
-                    User.objects.create_user(username=register_name, password=register_password)
+                    User.objects.create_user(
+                        username=register_name, password=register_password)
                     messages.add_message(request, messages.SUCCESS, '帳號註冊成功')
                     return redirect('/login')
                 else:
                     messages.add_message(request, messages.WARNING, '已有相同的使用者')
-            else:        
+            else:
                 messages.add_message(request, messages.WARNING, '請再次輸入確認密碼')
         else:
-            messages.add_message(request, messages.INFO,'請檢查輸入的欄位內容')
+            messages.add_message(request, messages.INFO, '請檢查輸入的欄位內容')
     else:
         register_form = forms.RegisterForm()
     return render(request, 'register.html', locals())
+
 
 def index(request, pid=None, del_pass=None):
     if request.user.is_authenticated:
         username = request.user.username
         try:
             user = models.User.objects.get(username=username)
-            diaries = models.rfidtag.objects.filter(user=user).order_by('-ddate')
+            diaries = models.rfidtag.objects.filter(
+                user=user).order_by('-ddate')
         except:
             pass
 
     messages.get_messages(request)
     return render(request, 'index.html', locals())
 
-def rfidinfo(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-        try: 
-            user = User.objects.get(username=username)
-            wifiinfo = models.wifi.objects.get(user=user)
-            wifiname = wifiinfo.wifiname
-            wifipassword = wifiinfo.wifipassword   
 
-        except:
-            fail = 'fail'
+def rfidinfo(request):
+    if request.method == "POST":
+        rfidform = forms.RFIDForm(request.POST)
+        #from django.contrib.auth.models import User
+        #from basiclogin import models,forms
+        if rfidform.is_valid():
+            d = datetime.datetime.today().strftime('%Y-%m-%d')
+            username = request.user.username
+            user = User.objects.get(username=username)
+            rfidname = request.POST['rfidname']
+            try:
+                rfid = models.rfidtag.objects.get(rfid=rfidname)
+            except:
+                rfid = None
+
+            if rfid == None:
+                models.rfidtag.objects.create(
+                    user=user, rfid=rfidname, ddate=d)
+                return redirect('/')
+            elif rfid.rfid == rfidname:
+                messages.add_message(request, messages.WARNING, '已有相同標籤了')
+        else:
+            messages.add_message(request, messages.INFO, '請檢查輸入的欄位內容')
+    else:
+        rfidform = forms.RFIDForm()
+        if request.user.is_authenticated:
+            username = request.user.username
+            try:
+                user = User.objects.get(username=username)
+                wifiinfo = models.wifi.objects.get(user=user)
+                wifiname = wifiinfo.wifiname
+                wifipassword = wifiinfo.wifipassword
+            except:
+                fail = 'fail'
     return render(request, 'rfid.html', locals())
 
+'''
+def deleterfid(request,tag=None):
+    if tag:
+        try:
+            rfid = models.rfidtag.objects.get(rfid=tag)
+        except:
+            rfid = None
+        if rfid:
+            rfid.delete()
+            messages.add_message(request, messages.INFO, '刪除資料成功')
+    return(request,'rfid.html',locals())
+'''
 @login_required(login_url='/login/')
 def userinfo(request):
     if request.user.is_authenticated:
@@ -97,8 +141,8 @@ def userinfo(request):
             fail = 'fail'
     return render(request, 'userinfo.html', locals())
 
+
 def logout(request):
     auth.logout(request)
     messages.add_message(request, messages.INFO, "成功登出了")
     return redirect('/')
-
